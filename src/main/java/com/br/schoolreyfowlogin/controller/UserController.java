@@ -10,13 +10,7 @@ import javax.xml.bind.ValidationException;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
-
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+public record UserController(UserService userService) {
 
     @PostMapping
     public UserResponseDTO create(@RequestBody UserDto request) throws ValidationException {

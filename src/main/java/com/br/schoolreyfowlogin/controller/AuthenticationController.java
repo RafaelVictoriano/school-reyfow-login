@@ -23,23 +23,13 @@ import javax.xml.bind.ValidationException;
 
 
 @RestController
-@RequestMapping()
-public class AuthenticationController {
+@RequestMapping("/auth")
+public record AuthenticationController(UserService userService, AuthenticationManager authenticationManager,
+                                       JwtTokenUtil jwtTokenUtil) {
 
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    final ModelDaoOMapper mapper = Mappers.getMapper(ModelDaoOMapper.class);
-    private final JwtTokenUtil jwtTokenUtil;
-
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager,
-                                    JwtTokenUtil jwtTokenUtil) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     @PostMapping("login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody User request) {
+    public ResponseEntity login(@RequestBody User request) {
         try {
             var authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -47,7 +37,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
-                    .body(this.mapper.userToUserResponseDTO(user));
+                    .build();
 
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
