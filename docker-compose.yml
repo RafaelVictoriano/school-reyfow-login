@@ -1,0 +1,26 @@
+version: '2'
+services:
+  springboot:
+    container_name: school-reyfow-login
+    image: school-reyfow-login:latest
+    ports:
+      - 8080:8080
+    networks:
+      - spring-network
+    environment:
+      spring.datasource.url: 'jdbc:mysql://localhost:3306/school_reyfow?useTimezone=true&serverTimezone=UTC'
+      spring.datasource.username: 'root'
+      spring.datasource.password: '0510'
+      spring.datasource.testWhileIdle: 'true'
+      spring.datasource.validationQuery: 'SELECT 1'
+      spring.datasource.driver-class-name: 'com.mysql.cj.jdbc.Driver'
+      spring.jpa.show-sql: 'true'
+      spring.jpa.hibernate.ddl-auto: 'update'
+      spring.jpa.hibernate.naming-strategy: 'org.hibernate.cfg.ImproveNamingStrategy'
+      spring.jpa.properties.hibernate.dialect: 'org.hibernate.dialect.MySQL8Dialect'
+      server.servlet.contextPath: '/school-reyfow'
+
+
+networks:
+  spring-network:
+    driver: bridge
