@@ -16,7 +16,7 @@ public class Role implements GrantedAuthority {
     @Id
     private String authority;
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<User> users;
+    private Set<UserModel> userModels;
 
     public Role() {
     }
@@ -25,12 +25,12 @@ public class Role implements GrantedAuthority {
         this.authority = authority;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserModel> getUsers() {
+        return userModels;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUsers(Set<UserModel> userModels) {
+        this.userModels = userModels;
     }
 
     @Override

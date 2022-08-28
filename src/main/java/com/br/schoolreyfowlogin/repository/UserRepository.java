@@ -1,10 +1,10 @@
 package com.br.schoolreyfowlogin.repository;
 
-import com.br.schoolreyfowlogin.model.User;
+import com.br.schoolreyfowlogin.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String username);
+public interface UserRepository extends JpaRepository<UserModel, Long> {
+    Optional<UserModel> findByEmail(String username);
 }

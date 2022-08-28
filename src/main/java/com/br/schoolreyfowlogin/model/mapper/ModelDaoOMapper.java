@@ -1,6 +1,6 @@
 package com.br.schoolreyfowlogin.model.mapper;
 
-import com.br.schoolreyfowlogin.model.User;
+import com.br.schoolreyfowlogin.model.UserModel;
 import com.br.schoolreyfowlogin.model.dto.UserDto;
 import com.br.schoolreyfowlogin.model.dto.UserResponseDTO;
 import org.mapstruct.BeanMapping;
@@ -11,12 +11,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public abstract class ModelDaoOMapper {
 
-    public abstract User create(UserDto userDto);
+    public abstract UserModel create(UserDto userDto);
 
-    abstract User userResponseDTOToUser(UserResponseDTO userResponseDTO);
+    abstract UserModel userResponseDTOToUser(UserResponseDTO userResponseDTO);
 
-    public abstract UserResponseDTO userToUserResponseDTO(User user);
+    public abstract UserResponseDTO userToUserResponseDTO(UserModel userModel);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    abstract void updateUserFromUserResponseDTO(UserResponseDTO userResponseDTO, @MappingTarget User user);
+    abstract void updateUserFromUserResponseDTO(UserResponseDTO userResponseDTO, @MappingTarget UserModel userModel);
 }

@@ -1,12 +1,14 @@
 package com.br.schoolreyfowlogin.service;
 
 import com.br.schoolreyfowlogin.model.Role;
+import com.br.schoolreyfowlogin.model.UserModel;
 import com.br.schoolreyfowlogin.model.dto.UserDto;
 import com.br.schoolreyfowlogin.model.dto.UserResponseDTO;
 import com.br.schoolreyfowlogin.model.mapper.ModelDaoOMapper;
 import com.br.schoolreyfowlogin.repository.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,24 +23,26 @@ import java.util.Set;
 
 import static java.lang.String.format;
 
+@Transactional
 @Service
-public class UserService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     final UserRepository userRepository;
     final ModelDaoOMapper mapper = Mappers.getMapper(ModelDaoOMapper.class);
 
-    public UserService(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository
+        return userRepository
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(format("User with username - %s, not found", username)));
+        //return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
-    public com.br.schoolreyfowlogin.model.User getUser(Long id) {
+    public UserModel getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
@@ -53,14 +57,14 @@ public class UserService implements UserDetailsService {
             throw new ValidationException("Passwords don't match!");
         }
 
-        com.br.schoolreyfowlogin.model.User user = this.mapper.create(userDto);
+        UserModel userModel = this.mapper.create(userDto);
 
         final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(Set.of(new Role(Role.COORDINATOR)));
-        userRepository.save(user);
+        userModel.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userModel.setRoles(Set.of(new Role(Role.COORDINATOR)));
+        userRepository.save(userModel);
 
-        return this.mapper.userToUserResponseDTO(user);
+        return this.mapper.userToUserResponseDTO(userModel);
     }
 
 }
