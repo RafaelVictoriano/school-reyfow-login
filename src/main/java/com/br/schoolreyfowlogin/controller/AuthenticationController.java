@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.bind.ValidationException;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -27,12 +29,10 @@ public record AuthenticationController(UserDetailsServiceImpl userDetailsService
 
     @PostMapping("login")
     public ResponseEntity<UserResponseDTO> login(Authentication auth) {
-//            var authenticate = authenticationManager
-//                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         final var user = (UserModel) auth.getPrincipal();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
+                .header(AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
                 .body(mapper.userToUserResponseDTO(user));
 
     }
