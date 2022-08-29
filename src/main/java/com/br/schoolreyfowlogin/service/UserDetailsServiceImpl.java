@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(format("User with username - %s, not found", username)));
-        //return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
+       // return new User(user.getUsername(), user.getPassword(), true, true, true, true, user.getAuthorities());
     }
 
     public UserModel getUser(Long id) {
