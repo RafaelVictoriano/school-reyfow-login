@@ -1,26 +1,47 @@
-version: '2'
+version: '3.3'
+
 services:
-  springboot:
-    container_name: school-reyfow-login
-    image: school-reyfow-login:latest
-    ports:
-      - 8080:8080
-    networks:
-      - spring-network
+  localstack:
+    container_name: "localstack_main"
+    image: localstack/localstack:latest
     environment:
-      spring.datasource.url: 'jdbc:mysql://localhost:3306/school_reyfow?useTimezone=true&serverTimezone=UTC'
-      spring.datasource.username: 'root'
-      spring.datasource.password: '0510'
-      spring.datasource.testWhileIdle: 'true'
-      spring.datasource.validationQuery: 'SELECT 1'
-      spring.datasource.driver-class-name: 'com.mysql.cj.jdbc.Driver'
-      spring.jpa.show-sql: 'true'
-      spring.jpa.hibernate.ddl-auto: 'update'
-      spring.jpa.hibernate.naming-strategy: 'org.hibernate.cfg.ImproveNamingStrategy'
-      spring.jpa.properties.hibernate.dialect: 'org.hibernate.dialect.MySQL8Dialect'
-      server.servlet.contextPath: '/school-reyfow'
+      - SERVICES=dynamodb
+      - LAMBDA_EXECUTOR=docker_reuse
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=us-east-1
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8080
+    ports:
+      - "53:53"
+      - "53:53/udp"
+      - "443:443"
+      - "4566:4566"
+      - "4571:4571"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack_data:/tmp/localstack/data
+
+volumes:
+  localstack_data:
 
 
-networks:
-  spring-network:
-    driver: bridge
+
+#version: '2'
+#services:
+#  dynamodb:
+#    image: amazon/dynamodb-local
+#    container_name: my-dynamodb
+#    hostname: dynamodb
+#    restart: always
+#    volumes:
+#      - ./my-dynamodb-data:/home/dynamodblocal/data
+#    ports:
+#      - 8000:8000
+#    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/"
+#
+#
+#networks:
+#  spring-network:
+#    driver: bridge

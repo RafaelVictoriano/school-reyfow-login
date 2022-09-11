@@ -1,49 +1,43 @@
 package com.br.schoolreyfowlogin.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.br.schoolreyfowlogin.util.RolesConvertUtil;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.List;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
+@DynamoDBTable(tableName = "users")
+public class UserModel {
 
-@Entity
-@Table(name = "users")
-public class UserModel implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @DynamoDBHashKey(attributeName = "id")
     private String email;
+
+    @DynamoDBAttribute()
     private String name;
+
+    @DynamoDBAttribute()
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
 
+    @DynamoDBAttribute()
+    @DynamoDBTypeConverted(converter = RolesConvertUtil.class)
+    private List<Role> roles;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> authorities) {
-        this.roles = authorities;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -54,43 +48,11 @@ public class UserModel implements UserDetails {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getName() {
+        return name;
     }
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return isEnabled();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return isEnabled();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isEnabled();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }

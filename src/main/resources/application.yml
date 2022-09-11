@@ -1,0 +1,13 @@
+# SPRING DATA
+
+
+aws:
+  endpoint: http://localhost:4566
+
+app:
+  local: true
+
+server:
+  servlet:
+    contextPath: /school-reyfow
+  port: 5080

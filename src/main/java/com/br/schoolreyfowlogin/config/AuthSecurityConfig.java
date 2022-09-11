@@ -21,7 +21,7 @@ public class AuthSecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeHttpRequests()
+               .authorizeHttpRequests()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

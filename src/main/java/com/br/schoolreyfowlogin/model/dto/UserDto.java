@@ -1,6 +1,7 @@
 package com.br.schoolreyfowlogin.model.dto;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 public class UserDto implements Serializable {

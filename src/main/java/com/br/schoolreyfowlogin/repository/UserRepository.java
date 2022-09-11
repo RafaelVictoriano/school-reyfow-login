@@ -1,10 +1,12 @@
 package com.br.schoolreyfowlogin.repository;
 
 import com.br.schoolreyfowlogin.model.UserModel;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserModel, Long> {
+@EnableScan
+public interface UserRepository extends CrudRepository<UserModel, String> {
     Optional<UserModel> findByEmail(String username);
 }

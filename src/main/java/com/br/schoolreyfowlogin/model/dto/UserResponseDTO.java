@@ -1,14 +1,15 @@
 package com.br.schoolreyfowlogin.model.dto;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 public class UserResponseDTO implements Serializable {
     private final String email;
     private final String password;
-    private final Set<RoleDTO> roles;
+    private final List<RoleDTO> roles;
 
-    public UserResponseDTO(String email, String password, Set<RoleDTO> roles) {
+    public UserResponseDTO(String email, String password, List<RoleDTO> roles) {
         this.email = email;
         this.roles = roles;
         this.password = password;
@@ -18,7 +19,7 @@ public class UserResponseDTO implements Serializable {
         return email;
     }
 
-    public Set<RoleDTO> getRoles() {
+    public List<RoleDTO> getRoles() {
         return roles;
     }
 

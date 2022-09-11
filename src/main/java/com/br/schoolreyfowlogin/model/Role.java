@@ -1,36 +1,20 @@
 package com.br.schoolreyfowlogin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import java.util.Set;
-
-@Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Role implements GrantedAuthority {
 
     public static final String COORDINATOR = "ROLE_COORDINATOR";
 
-    @Id
     private String authority;
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<UserModel> userModels;
 
     public Role() {
     }
 
     public Role(String authority) {
         this.authority = authority;
-    }
-
-    public Set<UserModel> getUsers() {
-        return userModels;
-    }
-
-    public void setUsers(Set<UserModel> userModels) {
-        this.userModels = userModels;
     }
 
     @Override

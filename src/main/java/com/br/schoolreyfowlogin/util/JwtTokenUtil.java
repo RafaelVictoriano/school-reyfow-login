@@ -4,6 +4,7 @@ import com.br.schoolreyfowlogin.model.UserModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -17,10 +18,10 @@ public class JwtTokenUtil implements Serializable {
 
     private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP512lm2123113513nlm15161515";
 
-    public String generateAccessToken(UserModel userModel) {
+    public String generateAccessToken(final UserDetails userModel) {
         return Jwts.builder()
-                .setSubject(format("%s", userModel.getId()))
-                .setIssuer(userModel.getEmail())
+                .setSubject(userModel.getUsername())
+                .setIssuer(userModel.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
                 .signWith(getSigningKey())

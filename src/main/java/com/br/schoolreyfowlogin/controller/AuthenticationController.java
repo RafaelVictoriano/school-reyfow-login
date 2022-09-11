@@ -10,12 +10,10 @@ import com.br.schoolreyfowlogin.util.JwtTokenUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
-import javax.xml.bind.ValidationException;
+import javax.validation.ValidationException;
 
 
 @RestController
@@ -26,20 +24,22 @@ public record AuthenticationController(UserDetailsServiceImpl userDetailsService
 
 
     @PostMapping("login")
-    public ResponseEntity<UserResponseDTO> login(Authentication auth) {
-//            var authenticate = authenticationManager
-//                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        final var user = (UserModel) auth.getPrincipal();
+    public ResponseEntity<UserDetails> login(Authentication auth) {
+        final var user = (UserDetails) auth.getPrincipal();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
-                .body(mapper.userToUserResponseDTO(user));
+                .body(user);
 
     }
 
     @PostMapping("register")
-    public UserResponseDTO register(@RequestBody UserDto request) throws ValidationException {
+    public UserModel register(@RequestBody UserDto request) throws ValidationException {
         return userDetailsServiceImpl.create(request);
+    }
+
+    public Iterable<UserModel> get() throws ValidationException {
+        return userDetailsServiceImpl.getAll();
     }
 
 }
